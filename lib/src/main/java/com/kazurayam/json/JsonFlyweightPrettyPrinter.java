@@ -47,13 +47,16 @@ public class JsonFlyweightPrettyPrinter {
         // loop over all input lines,
         while ((line = br.readLine()) != null) {
             // loop over all characters in a line
+            char prevChar = ' ';
             for (char ch : line.toCharArray()) {
-                // pretty print it
+                // translate characters
                 switch (ch) {
                     case '"':
-                        // switch the quoting status
                         sb.append(ch);
-                        inQuote = !inQuote;
+                        if (prevChar != '\\') {
+                            // switch the quoting status
+                            inQuote = !inQuote;
+                        }
                         break;
                     case ' ':
                     case '\t':
@@ -81,8 +84,8 @@ public class JsonFlyweightPrettyPrinter {
                         sb.append(ch);
                         break;
                     case ',':
-                        // Ending a JSON item; create a new line after
                         sb.append(ch);
+                        // Ending a JSON item; create a new line after
                         if (!inQuote) {
                             newLineAndIndent(indentLevel, sb);
                         }
@@ -90,6 +93,7 @@ public class JsonFlyweightPrettyPrinter {
                     default:
                         sb.append(ch);
                 }
+                prevChar = ch;   // to distinguish " and \"
             }
         }
         pw.print(sb);
