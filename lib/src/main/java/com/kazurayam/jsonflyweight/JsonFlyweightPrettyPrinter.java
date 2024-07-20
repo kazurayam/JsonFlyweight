@@ -1,4 +1,4 @@
-package com.kazurayam.json;
+package com.kazurayam.jsonflyweight;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class JsonFlyweightPrettyPrinter {
 
-    private static int STRINGBUILDER_CAPACITY = 8192;
+    private static final int BUFFER_CAPACITY = 8192;
 
     static void prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
         Reader reader = new InputStreamReader(uglyJSON, StandardCharsets.UTF_8);
@@ -42,7 +42,7 @@ public class JsonFlyweightPrettyPrinter {
         BufferedReader br = new BufferedReader(uglyJSON);
         PrintWriter pw = new PrintWriter(new BufferedWriter(prettyPrintedJSON));
         //
-        StringBuilder sb = new StringBuilder(STRINGBUILDER_CAPACITY);
+        StringBuilder sb = new StringBuilder();
         int indentLevel = 0;
         boolean inQuote = false;
         String line;
@@ -105,7 +105,7 @@ public class JsonFlyweightPrettyPrinter {
                 prevChar = ch;   // to distinguish " and \"
             }
             // we will flush the buffer before it gets too large
-            if (sb.length() > STRINGBUILDER_CAPACITY * 0.9) {
+            if (sb.length() >  BUFFER_CAPACITY * 0.9) {
                 pw.print(sb);
                 pw.flush();
                 sb.setLength(0);

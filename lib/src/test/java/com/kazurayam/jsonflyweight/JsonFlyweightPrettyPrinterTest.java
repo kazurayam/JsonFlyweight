@@ -1,4 +1,4 @@
-package com.kazurayam.json;
+package com.kazurayam.jsonflyweight;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
