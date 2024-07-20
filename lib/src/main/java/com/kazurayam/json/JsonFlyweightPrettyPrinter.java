@@ -28,6 +28,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class JsonFlyweightPrettyPrinter {
 
+    private static int STRINGBUILDER_CAPACITY = 8192;
+
     static void prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
         Reader reader = new InputStreamReader(uglyJSON, StandardCharsets.UTF_8);
         Writer writer = new OutputStreamWriter(prettyPrintedJSON, StandardCharsets.UTF_8);
@@ -40,7 +42,7 @@ public class JsonFlyweightPrettyPrinter {
         BufferedReader br = new BufferedReader(uglyJSON);
         PrintWriter pw = new PrintWriter(new BufferedWriter(prettyPrintedJSON));
         //
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(STRINGBUILDER_CAPACITY);
         int indentLevel = 0;
         boolean inQuote = false;
         String line;
@@ -90,10 +92,23 @@ public class JsonFlyweightPrettyPrinter {
                             newLineAndIndent(indentLevel, sb);
                         }
                         break;
+                    case ':':
+                        sb.append(ch);
+                        if (!inQuote) {
+                            sb.append(" ");
+                            // "key": "value" --- insert a space after colon :
+                        }
+                        break;
                     default:
                         sb.append(ch);
                 }
                 prevChar = ch;   // to distinguish " and \"
+            }
+            // we will flush the buffer before it gets too large
+            if (sb.length() > STRINGBUILDER_CAPACITY * 0.9) {
+                pw.print(sb);
+                pw.flush();
+                sb.setLength(0);
             }
         }
         pw.print(sb);
@@ -112,7 +127,7 @@ public class JsonFlyweightPrettyPrinter {
      */
     private static void newLineAndIndent(int indentLevel, StringBuilder stringBuilder) {
         stringBuilder.append(System.lineSeparator());
-        // Assuming indentation using 4 spaces
+        // Assuming indentation using 4 spaces per level
         stringBuilder.append("    ".repeat(Math.max(0, indentLevel)));
     }
 }
