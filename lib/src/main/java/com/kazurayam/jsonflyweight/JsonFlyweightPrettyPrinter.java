@@ -13,23 +13,42 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
 /**
- * This utility class pretty-prints a JSON.
- * It inserts NewLine characters, inserts line indentations,
- * strips redundant white spaces, so that the JSON becomes better readable for human.
- * This method reads a character stream from the InputStream as the 1st argument,
- * which is supposed to be a large JSON string,
- * pretty-print it,
- * and write the character stream immediately into the OutputStream as the 2nd argument.
- * This class does pretty-printing without buffering the input character stream
- * into a variable of type java.lang.String; therefore it is flyweight.
- * This method requires minimum memory to run regardless how large the input JSON is.
- * This method is useful to perform "pretty-print" on a super large JSON file.
+ * This utility class performs pretty-printing a JSON.
  *
+ * The methods run very fast.
+ * The methods do NOT load the JSON text into a String in memory,
+ * which could potentially be very large (as large as 4 gigabyte).
+ * The methods translate characters to characters while performing pretty-printing.
+ * Therefore, the methods requires minimum size of memory runtime.
  */
 public class JsonFlyweightPrettyPrinter {
 
     private static final int BUFFER_CAPACITY = 8192;
 
+    /**
+     * This method will pretty-print a JSON as an InputStream,
+     * write the result into an OutputStream.
+     *
+     * <pre>
+     *     import com.kazurayam.jsonflyweight.JsonFlyweightPrettyPrinter;
+     *     import java.nio.file.Files;
+     *     import java.nio.file.Path;
+     *     import java.nio.file.Paths;
+     *     class Sample {
+     *         public void main(String args) throws IOException {
+     *             Path inputJson = ...
+     *             Path outputJson = ...
+     *             JsonFlyweightPrettyPrinter.prettyPrint(
+     *                 Files.newInputStream(inputJson),
+     *                 Files.newOutputStream(outputJson)
+     *             );
+     *         }
+     *     }
+     * </pre>
+     * @param uglyJSON ugly JSON
+     * @param prettyPrintedJSON pretty printed JSON
+     * @throws IOException
+     */
     static void prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
         Reader reader = new InputStreamReader(uglyJSON, StandardCharsets.UTF_8);
         Writer writer = new OutputStreamWriter(prettyPrintedJSON, StandardCharsets.UTF_8);
@@ -38,6 +57,42 @@ public class JsonFlyweightPrettyPrinter {
         writer.close();
     }
 
+    /**
+     * This method will pretty-print a JSON as a Reader, write the result into a Writer.
+     * This method runs very fast. This method requires minimum size of runtime memory.
+     *
+     * <pre>
+     *     import com.kazurayam.jsonflyweight.JsonFlyweightPrettyPrinter;
+     *     import java.io.util.StringReader;
+     *     import java.io.util.StringWriter;
+     *     public class Sample {
+     *         public void main(String[] args) throws IOException {
+     *             String input = "{\"books\": [{\"title\":\"Le Peste\",\"author\":\"Albert Camus\"}]}";
+     *             StringReader sr = new StringReader(input);
+     *             StringWriter sw = new StringWriter();
+     *             JsonFlyweightPrettyPrinter.prettyPrint(sr, sw);
+     *             System.out.println(sw.toString());
+     *         }
+     *     }
+     * </pre>
+     *
+     * This code will emit the following:
+     *
+     * <pre>
+     * {
+     *     "books": [
+     *         {
+     *             "title": "Le Peste",
+     *             "author": "Albert Camus"
+     *         }
+     *     ]
+     * }
+     * </pre>
+     *
+     * @param uglyJSON ugly JSON
+     * @param prettyPrintedJSON pretty printed JSON
+     * @throws IOException
+     */
     static void prettyPrint(Reader uglyJSON, Writer prettyPrintedJSON) throws IOException {
         BufferedReader br = new BufferedReader(uglyJSON);
         PrintWriter pw = new PrintWriter(new BufferedWriter(prettyPrintedJSON));

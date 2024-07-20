@@ -1,4 +1,4 @@
-// JsonFlyweightPrettyPrinter/lib/build.gradle
+// JsonFlyweight/lib/build.gradle
 
 plugins {
     id 'java-library'
@@ -63,7 +63,7 @@ publishing {
                 groupId = project.group
                 name = project.rootProject.name
                 description = "A utility class which pretty prints a JSON very fast with minimum memory requirement"
-                url = "https://kazurayam.github.io/JsonFlyweightPrettyPrinter/"
+                url = "https://kazurayam.github.io/JsonFlyweight/"
                 licenses {
                     license {
                         name = "The Apache License, Version 2.0"
