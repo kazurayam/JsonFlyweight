@@ -16,16 +16,17 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonFlyweightPrettyPrinterTest {
-    private static final Logger logger = LoggerFactory.getLogger(JsonFlyweightPrettyPrinterTest.class);
+public class FlyPrettyPrinterTest {
+    private static final Logger logger = LoggerFactory.getLogger(FlyPrettyPrinterTest.class);
 
     private static final TestOutputOrganizer too =
-            new TestOutputOrganizer.Builder(JsonFlyweightPrettyPrinterTest.class)
+            new TestOutputOrganizer.Builder(FlyPrettyPrinterTest.class)
                     .outputDirectoryRelativeToProject("build/tmp/testOutput")
-                    .subOutputDirectory(JsonFlyweightPrettyPrinterTest.class).build();
+                    .subOutputDirectory(FlyPrettyPrinterTest.class).build();
 
     private Path sampleHAR;
     private Path storeJson;
@@ -38,9 +39,13 @@ public class JsonFlyweightPrettyPrinterTest {
     @BeforeClass
     public void beforeClass() {
         Path fixtures = too.getProjectDirectory().resolve("src/test/fixtures");
-        sampleHAR = fixtures.resolve("sample.har");
         storeJson = fixtures.resolve("store.json");
         commaJson = fixtures.resolve("comma_in_escaped_quotes.json");
+        //
+        Path userHome = Paths.get(System.getProperty("user.home"));
+        sampleHAR = userHome
+                .resolve("katalon-workspace/BrowserMobProxyInKatalonStudio")
+                .resolve("work/sample.har");
     }
 
     /**
@@ -51,7 +56,7 @@ public class JsonFlyweightPrettyPrinterTest {
         String ugly = Files.readString(storeJson);
         StringReader sr = new StringReader(ugly);
         StringWriter sw = new StringWriter();
-        JsonFlyweightPrettyPrinter.prettyPrint(sr,  sw);
+        FlyPrettyPrinter.prettyPrint(sr,  sw);
         assertThat(sw.toString()).isNotEmpty();
         logger.debug(sw.toString());
         assertThat(isValid(sw.toString())).isTrue();
@@ -66,7 +71,7 @@ public class JsonFlyweightPrettyPrinterTest {
         Path dir = too.cleanMethodOutputDirectory("test_pp_HAR");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
-        JsonFlyweightPrettyPrinter.prettyPrint(is, os);
+        FlyPrettyPrinter.prettyPrint(is, os);
         //
         assertThat(out).exists();
         assertThat(out.toFile().length()).isGreaterThan(0);
@@ -85,7 +90,7 @@ public class JsonFlyweightPrettyPrinterTest {
         Path dir = too.cleanMethodOutputDirectory("test_comma_in_escaped_quotes");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
-        JsonFlyweightPrettyPrinter.prettyPrint(is, os);
+        FlyPrettyPrinter.prettyPrint(is, os);
         //
         assertThat(out).exists();
         assertThat(out.toFile().length()).isGreaterThan(0);
