@@ -56,9 +56,10 @@ public class FlyPrettyPrinterTest {
         String ugly = Files.readString(storeJson);
         StringReader sr = new StringReader(ugly);
         StringWriter sw = new StringWriter();
-        FlyPrettyPrinter.prettyPrint(sr,  sw);
+        int numLines = FlyPrettyPrinter.prettyPrint(sr,  sw);
         assertThat(sw.toString()).isNotEmpty();
         logger.debug(sw.toString());
+        assertThat(numLines).isEqualTo(20);
         assertThat(isValid(sw.toString())).isTrue();
     }
 
@@ -71,7 +72,7 @@ public class FlyPrettyPrinterTest {
         Path dir = too.cleanMethodOutputDirectory("test_pp_HAR");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
-        FlyPrettyPrinter.prettyPrint(is, os);
+        int numLines = FlyPrettyPrinter.prettyPrint(is, os);
         //
         assertThat(out).exists();
         assertThat(out.toFile().length()).isGreaterThan(0);
@@ -90,7 +91,7 @@ public class FlyPrettyPrinterTest {
         Path dir = too.cleanMethodOutputDirectory("test_comma_in_escaped_quotes");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
-        FlyPrettyPrinter.prettyPrint(is, os);
+        int numLines = FlyPrettyPrinter.prettyPrint(is, os);
         //
         assertThat(out).exists();
         assertThat(out.toFile().length()).isGreaterThan(0);

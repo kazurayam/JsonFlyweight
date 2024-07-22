@@ -14,14 +14,13 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * This utility class performs pretty-printing a JSON.
- *
- * The methods run very fast.
- * The methods do NOT load the JSON text into a String in memory,
- * which could potentially be very large (as large as 4 gigabyte).
- * The methods translate characters to characters while performing pretty-printing.
+ * This class runs very fast.
+ * This class does NOT load whole JSON text into a String in memory,
+ * which could potentially be very large (as large as 2 gigabyte).
+ * The methods translate characters to characters while performing pretty-printing JSON.
  * Therefore, the methods requires minimum size of memory runtime.
  */
-public class JsonFlyweightPrettyPrinter {
+public class FlyPrettyPrinter {
 
     private static final int BUFFER_CAPACITY = 8192;
 
@@ -30,7 +29,7 @@ public class JsonFlyweightPrettyPrinter {
      * write the result into an OutputStream.
      *
      * <pre>
-     *     import com.kazurayam.jsonflyweight.JsonFlyweightPrettyPrinter;
+     *     import com.kazurayam.jsonflyweight.FlyPrettyPrinter;
      *     import java.nio.file.Files;
      *     import java.nio.file.Path;
      *     import java.nio.file.Paths;
@@ -38,23 +37,25 @@ public class JsonFlyweightPrettyPrinter {
      *         public void main(String args) throws IOException {
      *             Path inputJson = ...
      *             Path outputJson = ...
-     *             JsonFlyweightPrettyPrinter.prettyPrint(
+     *             FlyPrettyPrinter.prettyPrint(
      *                 Files.newInputStream(inputJson),
      *                 Files.newOutputStream(outputJson)
      *             );
      *         }
      *     }
      * </pre>
-     * @param uglyJSON ugly JSON
+     * @param uglyJSON ugly JSON. The source could be a large file of 2 megabytes or more
      * @param prettyPrintedJSON pretty printed JSON
+     * @returns number of lines in the pretty printed JSON
      * @throws IOException
      */
-    static void prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
+    static int prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
         Reader reader = new InputStreamReader(uglyJSON, StandardCharsets.UTF_8);
         Writer writer = new OutputStreamWriter(prettyPrintedJSON, StandardCharsets.UTF_8);
-        prettyPrint(reader, writer);
+        int numLines = prettyPrint(reader, writer);
         reader.close();
         writer.close();
+        return numLines;
     }
 
     /**
@@ -62,7 +63,7 @@ public class JsonFlyweightPrettyPrinter {
      * This method runs very fast. This method requires minimum size of runtime memory.
      *
      * <pre>
-     *     import com.kazurayam.jsonflyweight.JsonFlyweightPrettyPrinter;
+     *     import com.kazurayam.jsonflyweight.FlyPrettyPrinter;
      *     import java.io.util.StringReader;
      *     import java.io.util.StringWriter;
      *     public class Sample {
@@ -70,7 +71,7 @@ public class JsonFlyweightPrettyPrinter {
      *             String input = "{\"books\": [{\"title\":\"Le Peste\",\"author\":\"Albert Camus\"}]}";
      *             StringReader sr = new StringReader(input);
      *             StringWriter sw = new StringWriter();
-     *             JsonFlyweightPrettyPrinter.prettyPrint(sr, sw);
+     *             FlyPrettyPrinter.prettyPrint(sr, sw);
      *             System.out.println(sw.toString());
      *         }
      *     }
@@ -89,13 +90,15 @@ public class JsonFlyweightPrettyPrinter {
      * }
      * </pre>
      *
-     * @param uglyJSON ugly JSON
+     * @param uglyJSON ugly JSON. The source could be a large file of 2 megabytes or more
      * @param prettyPrintedJSON pretty printed JSON
+     * @returns number of lines in the pretty printed JSON
      * @throws IOException
      */
-    static void prettyPrint(Reader uglyJSON, Writer prettyPrintedJSON) throws IOException {
+    static int prettyPrint(Reader uglyJSON, Writer prettyPrintedJSON) throws IOException {
         BufferedReader br = new BufferedReader(uglyJSON);
         PrintWriter pw = new PrintWriter(new BufferedWriter(prettyPrintedJSON));
+        int numLines = 0;
         //
         StringBuilder sb = new StringBuilder();
         int indentLevel = 0;
@@ -129,6 +132,7 @@ public class JsonFlyweightPrettyPrinter {
                         if (!inQuote) {
                             indentLevel++;
                             newLineAndIndent(indentLevel, sb);
+                            numLines++;
                         }
                         break;
                     case '}':
@@ -137,6 +141,7 @@ public class JsonFlyweightPrettyPrinter {
                         if (!inQuote) {
                             indentLevel--;
                             newLineAndIndent(indentLevel, sb);
+                            numLines++;
                         }
                         sb.append(ch);
                         break;
@@ -145,6 +150,7 @@ public class JsonFlyweightPrettyPrinter {
                         // Ending a JSON item; create a new line after
                         if (!inQuote) {
                             newLineAndIndent(indentLevel, sb);
+                            numLines++;
                         }
                         break;
                     case ':':
@@ -170,6 +176,8 @@ public class JsonFlyweightPrettyPrinter {
         pw.flush();
         pw.close();
         br.close();
+
+        return numLines;
     }
 
 
