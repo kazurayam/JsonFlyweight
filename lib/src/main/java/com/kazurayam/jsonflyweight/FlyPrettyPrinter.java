@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * This utility class performs pretty-printing a JSON.
@@ -22,7 +23,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class FlyPrettyPrinter {
 
-    private static final int BUFFER_CAPACITY = 8192;
+    private static final int BUFFER_CAPACITY = 32768;
 
     /**
      * This method will pretty-print a JSON as an InputStream,
@@ -53,8 +54,6 @@ public class FlyPrettyPrinter {
         Reader reader = new InputStreamReader(uglyJSON, StandardCharsets.UTF_8);
         Writer writer = new OutputStreamWriter(prettyPrintedJSON, StandardCharsets.UTF_8);
         int numLines = prettyPrint(reader, writer);
-        reader.close();
-        writer.close();
         return numLines;
     }
 
@@ -96,6 +95,8 @@ public class FlyPrettyPrinter {
      * @throws IOException
      */
     static int prettyPrint(Reader uglyJSON, Writer prettyPrintedJSON) throws IOException {
+        Objects.requireNonNull(uglyJSON);
+        Objects.requireNonNull(prettyPrintedJSON);
         BufferedReader br = new BufferedReader(uglyJSON);
         PrintWriter pw = new PrintWriter(new BufferedWriter(prettyPrintedJSON));
         int numLines = 0;
@@ -179,7 +180,6 @@ public class FlyPrettyPrinter {
         pw.flush();
         pw.close();
         br.close();
-
         return numLines;
     }
 
@@ -193,7 +193,7 @@ public class FlyPrettyPrinter {
      */
     private static void newLineAndIndent(int indentLevel, StringBuilder stringBuilder) {
         stringBuilder.append(System.lineSeparator());
-        // Assuming indentation using 4 spaces per level
-        stringBuilder.append("    ".repeat(Math.max(0, indentLevel)));
+        // Assuming indentation using 2 spaces per level
+        stringBuilder.append("  ".repeat(Math.max(0, indentLevel)));
     }
 }
