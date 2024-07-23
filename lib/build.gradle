@@ -15,6 +15,7 @@ ext {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -25,7 +26,20 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.26.3'
     testImplementation 'ch.qos.logback:logback-classic:1.5.6'
     testImplementation 'com.kazurayam:unittest-helper:0.5.1'
+
+    // for measurement of pretty-printers performace
+    testImplementation 'com.google.code.gson:gson:2.11.0'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+    testImplementation 'com.kazurayam:timekeeper:0.5.0-SNAPSHOT'
+    testImplementation 'org.apache.groovy:groovy:4.0.22'
+
+    // for creating a large JSON-formatted file (HAR) as fixture
+    // see https://github.com/kazurayam/JsonFlyweight/issues/6
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.1'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.23.0'
+    testImplementation('net.lightbody.bmp:browsermob-core:2.1.5') {
+        exclude group: "com.fasterxml.jackson.core", module: "*"
+    }
 }
 
 java {
