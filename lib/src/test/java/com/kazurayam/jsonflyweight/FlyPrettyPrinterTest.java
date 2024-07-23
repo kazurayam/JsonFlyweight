@@ -64,20 +64,31 @@ public class FlyPrettyPrinterTest {
     }
 
     /**
-     * test pretty-printing a large JSON
+     * this testcase requires a very large sample HAR file.
+     * The file can be found only on the kazurayam's Mac.
+     * In other environment, this will certainly fail due to a FileNotFoundException.
+     *
+     * @throws IOException
      */
     @Test
-    public void test_pp_HAR() throws IOException {
-        InputStream is = Files.newInputStream(sampleHAR);
-        Path dir = too.cleanMethodOutputDirectory("test_pp_HAR");
+    public void test_pp_large_HAR() throws IOException {
+        Path har180mb = locateLargeHAR();
+        InputStream is = Files.newInputStream(har180mb);
+        Path dir = too.cleanMethodOutputDirectory("test_pp_large_HAR");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
         int numLines = FlyPrettyPrinter.prettyPrint(is, os);
-        //
         assertThat(out).exists();
-        assertThat(out.toFile().length()).isGreaterThan(0);
-        assertThat(isValid(Files.readString(out))).isTrue();
+        assertThat(out.toFile().length()).isGreaterThan(11 * 1000 * 1000);
     }
+
+    private Path locateLargeHAR() {
+        Path userHome = Paths.get(System.getProperty("user.home"));
+        Path hostProject = userHome.resolve("katalon-workspace/BrowserMobProxyInKatalonStudio");
+        Path harFile = hostProject.resolve("work/TS3_process_large_HAR.har");
+        return harFile;
+    }
+
 
     /**
      * comma character inside a pair of escaped quotes is problematic
@@ -97,6 +108,7 @@ public class FlyPrettyPrinterTest {
         assertThat(out.toFile().length()).isGreaterThan(0);
         assertThat(isValid(Files.readString(out))).isTrue();
     }
+
 
     private Boolean isValid(String json) {
         try {

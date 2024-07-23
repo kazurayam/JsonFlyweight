@@ -103,12 +103,15 @@ public class FlyPrettyPrinter {
         StringBuilder sb = new StringBuilder();
         int indentLevel = 0;
         boolean inQuote = false;
-        String line;
-        // loop over all input lines,
-        while ((line = br.readLine()) != null) {
-            // loop over all characters in a line
+
+        char[] charBuffer = new char[BUFFER_CAPACITY];
+        int numCharsRead;
+        // consume all characters from the input
+        while ((numCharsRead = br.read(charBuffer, 0, charBuffer.length)) != -1) {
+            // loop over all characters buffered
             char prevChar = ' ';
-            for (char ch : line.toCharArray()) {
+            for (int i = 0; i < numCharsRead; i++) {
+                char ch = charBuffer[i];
                 // translate characters
                 switch (ch) {
                     case '"':
