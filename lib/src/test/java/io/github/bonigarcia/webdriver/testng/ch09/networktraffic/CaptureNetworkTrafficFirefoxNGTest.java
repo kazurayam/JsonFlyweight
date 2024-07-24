@@ -85,6 +85,12 @@ public class CaptureNetworkTrafficFirefoxNGTest {
         driver.quit();
     }
 
+    /**
+     * Will create a JSON file of 1.37 MB.
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testCaptureNetworkTrafficFirefox() throws IOException, InterruptedException {
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/");
