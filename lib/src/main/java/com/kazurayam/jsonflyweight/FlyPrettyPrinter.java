@@ -50,7 +50,7 @@ public class FlyPrettyPrinter {
      * @returns number of lines in the pretty printed JSON
      * @throws IOException
      */
-    static int prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
+    public static int prettyPrint(InputStream uglyJSON, OutputStream prettyPrintedJSON) throws IOException {
         Reader reader = new InputStreamReader(uglyJSON, StandardCharsets.UTF_8);
         Writer writer = new OutputStreamWriter(prettyPrintedJSON, StandardCharsets.UTF_8);
         int numLines = prettyPrint(reader, writer);
@@ -94,7 +94,7 @@ public class FlyPrettyPrinter {
      * @returns number of lines in the pretty printed JSON
      * @throws IOException
      */
-    static int prettyPrint(Reader uglyJSON, Writer prettyPrintedJSON) throws IOException {
+    public static int prettyPrint(Reader uglyJSON, Writer prettyPrintedJSON) throws IOException {
         Objects.requireNonNull(uglyJSON);
         Objects.requireNonNull(prettyPrintedJSON);
         BufferedReader br = new BufferedReader(uglyJSON);
