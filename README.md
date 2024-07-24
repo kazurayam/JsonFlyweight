@@ -7,7 +7,7 @@
 The `prettyPrint` method does pretty-print a JSON. The method has the following characteristics.
 
 1. It works very fast. It is as fast as Gson and Jackson Databind.
-2. It requires minimum memory runtime. It creates an internal buffer of 64 Kilobyte and no more.
+2. It requires minimum memory runtime. It creates an internal buffer of 32 Kilobyte and no more. So it can prettify a JSON-formatted text of some megabyte or gigabyte in size without any memory issue. 
 
 There are many Pretty Printers for JSON in the world. Gson, Jackson Databind, Groovy's JsonOutput, and more. All of them are fine to process a small JSON. However, if you want to pretty-print a large JSON, you may encounter problems. Some of them are too slow. Some of them requires too much memory.
 
