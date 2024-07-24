@@ -2,13 +2,9 @@ package com.kazurayam.jsonflyweight;
 
 import com.kazurayam.timekeeper.ReportOptions;
 import com.kazurayam.timekeeper.Timekeeper;
-import com.kazurayam.timekeeper.Measurement;
-import com.kazurayam.timekeeper.Table;
 import com.kazurayam.unittest.TestOutputOrganizer;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,9 +22,9 @@ import java.nio.file.Paths;
 public class PrettyPrintersMeasurement {
 
     private static final TestOutputOrganizer too =
-            new TestOutputOrganizer.Builder(FlyPrettyPrinterTest.class)
+            new TestOutputOrganizer.Builder(JsonFlyweightTest.class)
                     .outputDirectoryRelativeToProject("build/tmp/testOutput")
-                    .subOutputDirectory(FlyPrettyPrinterTest.class).build();
+                    .subOutputDirectory(JsonFlyweightTest.class).build();
 
     private Path getFixtureHAR() {
         Path userHome = Paths.get(System.getProperty("user.home"));

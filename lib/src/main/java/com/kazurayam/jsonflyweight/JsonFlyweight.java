@@ -21,7 +21,7 @@ import java.util.Objects;
  * The methods translate characters to characters while performing pretty-printing JSON.
  * Therefore, the methods requires minimum size of memory runtime.
  */
-public class FlyPrettyPrinter {
+public class JsonFlyweight {
 
     private static final int BUFFER_CAPACITY = 32768;
 

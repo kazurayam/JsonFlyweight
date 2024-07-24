@@ -1,20 +1,13 @@
 package io.github.bonigarcia.webdriver.testng.ch09.networktraffic;
 
-import static java.lang.invoke.MethodHandles.lookup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
 
-import com.kazurayam.jsonflyweight.FlyPrettyPrinter;
+import com.kazurayam.jsonflyweight.JsonFlyweight;
 import com.kazurayam.unittest.TestOutputOrganizer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +23,6 @@ import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.core.har.Har;
-import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.CaptureType;
 
 /**
@@ -120,12 +112,19 @@ public class CaptureNetworkTrafficFirefoxNGTest {
 
         // pretty-print the original HAR, write a pretty HAR into another file
         Path prettyHar = classOutputDir.resolve("sample.pp.har");
-        int numbLines = FlyPrettyPrinter.prettyPrint(
+        int numbLines = JsonFlyweight.prettyPrint(
                 Files.newInputStream(uglyHar),
                 Files.newOutputStream(prettyHar));
         logger.info(String.format("Pretty HAR was written into %s", prettyHar));
         logger.info(String.format("    length : %,d bytes", prettyHar.toFile().length()));
         logger.info(String.format("    #lines : %,d", numbLines));
+
+        // copy the HAR file into ./src/test/fixtures directory for later reuse
+        // but we will ignore the .har file out of the git repository
+        Path fixture = too.getProjectDirectory()
+                .resolve("src/test/fixtures")
+                .resolve("sample.har");
+        Files.copy(uglyHar, fixture);
     }
 
     /**

@@ -20,13 +20,13 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FlyPrettyPrinterTest {
-    private static final Logger logger = LoggerFactory.getLogger(FlyPrettyPrinterTest.class);
+public class JsonFlyweightTest {
+    private static final Logger logger = LoggerFactory.getLogger(JsonFlyweightTest.class);
 
     private static final TestOutputOrganizer too =
-            new TestOutputOrganizer.Builder(FlyPrettyPrinterTest.class)
+            new TestOutputOrganizer.Builder(JsonFlyweightTest.class)
                     .outputDirectoryRelativeToProject("build/tmp/testOutput")
-                    .subOutputDirectory(FlyPrettyPrinterTest.class).build();
+                    .subOutputDirectory(JsonFlyweightTest.class).build();
 
     private Path sampleHAR;
     private Path storeJson;
@@ -56,7 +56,7 @@ public class FlyPrettyPrinterTest {
         String ugly = Files.readString(storeJson);
         StringReader sr = new StringReader(ugly);
         StringWriter sw = new StringWriter();
-        int numLines = FlyPrettyPrinter.prettyPrint(sr,  sw);
+        int numLines = JsonFlyweight.prettyPrint(sr,  sw);
         assertThat(sw.toString()).isNotEmpty();
         logger.debug(sw.toString());
         assertThat(numLines).isEqualTo(20);
@@ -77,7 +77,7 @@ public class FlyPrettyPrinterTest {
         Path dir = too.cleanMethodOutputDirectory("test_pp_large_HAR");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
-        int numLines = FlyPrettyPrinter.prettyPrint(is, os);
+        int numLines = JsonFlyweight.prettyPrint(is, os);
         assertThat(out).exists();
         assertThat(out.toFile().length()).isGreaterThan(11 * 1000 * 1000);
     }
@@ -102,7 +102,7 @@ public class FlyPrettyPrinterTest {
         Path dir = too.cleanMethodOutputDirectory("test_comma_in_escaped_quotes");
         Path out = dir.resolve("out.json");
         OutputStream os = Files.newOutputStream(out);
-        int numLines = FlyPrettyPrinter.prettyPrint(is, os);
+        int numLines = JsonFlyweight.prettyPrint(is, os);
         //
         assertThat(out).exists();
         assertThat(out.toFile().length()).isGreaterThan(0);
