@@ -2,7 +2,7 @@
 
 `com.kazurayam.jsonflyweight.JsonFlyweight` is a Java class with a static method `prettyPrint`.
 
-- [`com.kazurayam.jsonflyweight.JsonFlyweight`]()
+- [`com.kazurayam.jsonflyweight.JsonFlyweight`](https://github.com/kazurayam/JsonFlyweight/blob/develop/lib/src/main/java/com/kazurayam/jsonflyweight/JsonFlyweight.java)
 
 The `prettyPrint` method does pretty-print a JSON. The method has the following characteristics.
 
@@ -16,7 +16,31 @@ The `com.kazurayam.jsonflyweight.JsonFlyweight` class is designed to process a v
 You can use it as follows:
 
 ```
+import com.kazurayam.jsonflyweight.JsonFlyweight;
+import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SampleTest {
+
+    @Test
+    public void testPrettyPrint() throws IOException {
+        Path projectDir = Paths.get(".");
+        Path inputHAR = projectDir.resolve("src/test/fixtures/sample.har");
+        Path prettyJson = projectDir.resolve("build/tmp/testOutput/Sample/sample.pp.json");
+        Files.createDirectories(prettyJson.getParent());
+        // now prettify it
+        int lines = JsonFlyweight.prettyPrint(Files.newInputStream(inputHAR), Files.newOutputStream(prettyJson));
+        assertThat(prettyJson).exists();
+        assertThat(lines).isGreaterThan(6_000);
+        assertThat(prettyJson.toFile().length()).isGreaterThan(1_300_000);
+    }
+}
 ```
 
 
