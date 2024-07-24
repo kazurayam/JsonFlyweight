@@ -1,1 +1,1 @@
-memberSearchIndex = [{"l":"JsonFlyweightPrettyPrinter()","h":"","u":"%3Cinit%3E()"}]
+memberSearchIndex = [{"l":"JsonFlyweight()","h":"","u":"%3Cinit%3E()"},{"l":"prettyPrint(InputStream, OutputStream)","h":"","u":"prettyPrint(java.io.InputStream,java.io.OutputStream)"},{"l":"prettyPrint(Reader, Writer)","h":"","u":"prettyPrint(java.io.Reader,java.io.Writer)"}]

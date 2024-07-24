@@ -1,0 +1,2 @@
+# we do not like to include any large HAR file(s) into the git repository
+*.har
