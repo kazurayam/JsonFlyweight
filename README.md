@@ -91,3 +91,11 @@ When you execute it, you will see the following output in the console.
 ```
 
 The `src/test/fixtures/sample.har` files in the above code was an HTTP Archive (HAR) of 1.3 MB in size with 6000 lines contained. The `JsonFlyweight.prettyPryt(InputStrea, OutputStream)` could prettify the input in less than 1 second, without any noticeable pressure to JVM heap memory.
+
+## JavaDoc
+
+- https://kazurayam.github.io/JsonFlyweight/api/com/kazurayam/jsonflyweight/JsonFlyweightPrettyPrinter.html
+
+## Maven Central
+
+- https://central.sonatype.com/artifact/com.kazurayam/JsonFlyweight
