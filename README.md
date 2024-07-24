@@ -6,12 +6,10 @@
 
 The `prettyPrint` method does pretty-print a JSON. The method has the following characteristics.
 
-1. It works very fast. It is as fast as Gson and Jackson Databind.
+1. It works very fast. It runs as fast as Gson and Jackson Databind.
 2. It requires minimum memory runtime. It creates an internal buffer of 32 Kilobyte and no more. So it can prettify a JSON-formatted text of some megabyte or gigabyte in size without any memory issue. 
 
-There are many Pretty Printers for JSON in the world. For example, [Gson, Jackson Databind](https://www.baeldung.com/java-json-pretty-print) and [Groovy's JsonOutput](https://www.baeldung.com/groovy-json#2-formatting-the-json-output). All of them are fine to process a small JSON. However, if you want to pretty-print a large JSON, you may encounter problems. Some of them are too slow. Some of them requires too much memory.
-
-The `com.kazurayam.jsonflyweight.JsonFlyweight` class is designed to process a very large JSON file.
+There are many Pretty Printers for JSON in the world. For example, [Gson, Jackson Databind](https://www.baeldung.com/java-json-pretty-print) and [Groovy's JsonOutput](https://www.baeldung.com/groovy-json#2-formatting-the-json-output). All of them are fine to process a small JSON. However, if you want to pretty-print a large JSON, you may encounter problems. Some of them are too slow. Some of them requires too much memory. In such situation, the `com.kazurayam.jsonflyweight.JsonFlyweight` class shines.
 
 You can use it as follows:
 
@@ -31,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SampleTest {
 
     @Test
-    public void testPrettyPrintStrings() throws IOException {
+    public void testPrettyPrintSmallStrings() throws IOException {
         Path projectDir = Paths.get(".");
         Path input = projectDir.resolve("src/test/fixtures/store.json");
         String uglyJson = Files.readString(input);
@@ -92,3 +90,4 @@ When you execute it, you will see the following output in the console.
 }
 ```
 
+The `src/test/fixtures/sample.har` files in the above code was an HTTP Archive (HAR) of 1.3 MB in size with 6000 lines contained. The `JsonFlyweight.prettyPryt(InputStrea, OutputStream)` could prettify the input in less than 1 second, without any pressure to JVM head memory.

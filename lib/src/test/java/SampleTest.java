@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SampleTest {
 
     @Test
-    public void testPrettyPrintStrings() throws IOException {
+    public void testPrettyPrintSmallStrings() throws IOException {
         Path projectDir = Paths.get(".");
         Path input = projectDir.resolve("src/test/fixtures/store.json");
         String uglyJson = Files.readString(input);
