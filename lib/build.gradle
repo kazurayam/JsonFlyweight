@@ -64,6 +64,15 @@ task copyJavadocToDocsDir(type: Copy) {
 }
 javadoc.finalizedBy copyJavadocToDocsDir
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
 jar {
     archiveBaseName = 'jsonflyweight'
 }
@@ -76,7 +85,7 @@ publishing {
             pom {
                 groupId = project.group
                 name = project.rootProject.name
-                description = "A utility class which pretty prints a JSON very fast with minimum memory requirement"
+                description = "A utility class which pretty prints a JSON very fast with minimum memory pressure"
                 url = "https://kazurayam.github.io/JsonFlyweight/"
                 licenses {
                     license {
