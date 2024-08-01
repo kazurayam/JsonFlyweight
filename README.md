@@ -98,4 +98,4 @@ The `src/test/fixtures/sample.har` files in the above code was an HTTP Archive (
 
 ## Published at the Maven Central Repository
 
-- https://central.sonatype.com/artifact/com.kazurayam/JsonFlyweight
+- https://central.sonatype.com/artifact/com.kazurayam/jsonflyweight
