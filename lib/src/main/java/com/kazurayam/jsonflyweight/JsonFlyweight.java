@@ -86,6 +86,10 @@ public class JsonFlyweight {
                             sb.append(ch);
                         }
                         break;
+                    case '\r':
+                    case '\n':
+                        // ignore the newline characters in the source.
+                        break;
                     case '{':
                     case '[':
                         // Starting a new block: increase the indent level
