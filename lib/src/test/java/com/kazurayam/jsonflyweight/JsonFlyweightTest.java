@@ -127,4 +127,13 @@ public class JsonFlyweightTest {
         JsonFlyweight.prettyPrint(sr, sw);
         assertThat(sw.toString()).contains("\"value?value\"");
     }
+
+    @Test
+    public void test_prettyPrinting_an_already_pretty_json() throws IOException {
+        String str = "{\n  \"key\": \"value\"\n}";
+        StringReader sr = new StringReader(str);
+        StringWriter sw = new StringWriter();
+        JsonFlyweight.prettyPrint(sr, sw);
+        assertThat(sw.toString()).contains(str);  // result the same
+    }
 }
