@@ -2,7 +2,7 @@
 
 `com.kazurayam.jsonflyweight.JsonFlyweight` is a Java class with a static method `prettyPrint`.
 
-- `com.kazurayam.jsonflyweight.JsonFlyweight`](https://github.com/kazurayam/JsonFlyweight/blob/develop/lib/src/main/java/com/kazurayam/jsonflyweight/JsonFlyweight.java)
+- [`com.kazurayam.jsonflyweight.JsonFlyweight`](https://github.com/kazurayam/JsonFlyweight/blob/develop/lib/src/main/java/com/kazurayam/jsonflyweight/JsonFlyweight.java)
 
 The `prettyPrint` method does pretty-print a JSON. The method has the following characteristics.
 
