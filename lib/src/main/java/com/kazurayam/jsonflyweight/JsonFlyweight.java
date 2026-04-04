@@ -86,6 +86,10 @@ public class JsonFlyweight {
                             sb.append(ch);
                         }
                         break;
+                    case '\r':
+                    case '\n':
+                        // ignore the newline characters in the source.
+                        break;
                     case '{':
                     case '[':
                         // Starting a new block: increase the indent level
@@ -122,7 +126,7 @@ public class JsonFlyweight {
                         }
                         break;
                     default:
-                        sb.append(ch);
+                        sb.append(sanitizeNonPrintableChar(ch));
                 }
                 prevChar = ch;   // to distinguish " and \"
             }
@@ -152,5 +156,36 @@ public class JsonFlyweight {
         stringBuilder.append(System.lineSeparator());
         // Assuming indentation using 2 spaces per level
         stringBuilder.append("  ".repeat(Math.max(0, indentLevel)));
+    }
+
+    /**
+     * Get rid of non-printable character such as
+     * 1 SOH
+     * 2 STX
+     * 6 ACK
+     * 28 FS
+     * 31 US
+     * 127 DEL
+     *
+     * See https://www.baeldung.com/java-replace-non-printable-unicode-characters
+     * @param ch any character
+     * @return ch itself if it is a printable character, otherwise replaced into '?'
+     */
+    static char sanitizeNonPrintableChar(char ch) {
+        char[] a = new char[]{ ch };
+        int codePoint = Character.codePointAt(a, 0);
+        if (codePoint >= 32 && codePoint != 127) {
+            return ch;
+        } else if (codePoint == 9  || codePoint == 10 || codePoint == 13 ||
+         codePoint == 14 || codePoint == 15) {
+            // 9: Horizontal Tab
+            // 10: Line Feed
+            // 13: Carriage Return
+            // 14: Shift Out
+            // 15: Shift In
+            return ch;
+        } else {
+            return '?';
+        }
     }
 }

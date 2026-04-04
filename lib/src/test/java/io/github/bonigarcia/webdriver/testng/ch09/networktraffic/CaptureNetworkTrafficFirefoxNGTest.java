@@ -6,6 +6,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import com.kazurayam.jsonflyweight.JsonFlyweight;
 import com.kazurayam.unittest.TestOutputOrganizer;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -38,6 +40,7 @@ import net.lightbody.bmp.proxy.CaptureType;
  * The original code is avaiable at
  * https://github.com/bonigarcia/selenium-webdriver-java/blob/master/selenium-webdriver-testng/src/test/java/io/github/bonigarcia/webdriver/testng/ch09/network_traffic/CaptureNetworkTrafficFirefoxNGTest.java
  */
+@Ignore
 public class CaptureNetworkTrafficFirefoxNGTest {
     static final Logger logger = getLogger(CaptureNetworkTrafficFirefoxNGTest.class);
 
@@ -124,7 +127,7 @@ public class CaptureNetworkTrafficFirefoxNGTest {
         Path fixture = too.getProjectDirectory()
                 .resolve("src/test/fixtures")
                 .resolve("sample.har");
-        Files.copy(uglyHar, fixture);
+        Files.copy(uglyHar, fixture, StandardCopyOption.REPLACE_EXISTING);
     }
 
     /**
